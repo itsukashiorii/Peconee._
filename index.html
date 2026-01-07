@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Kita Ikuyo</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="5.jpg" type="image/png"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* ---------- RESET ---------- */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+/* ---------- VARIABLES ---------- */
+:root{
+  --primary:#f6b;
+  --neon:#ff4757;
+  --bg:#0d0d0d;
+  --surface:#111;
+  --text:#e5e5e5;
+  --muted:#888;
+  --subtle:#aaa;
+  --border:rgba(255,255,255,.07);
+  --shadow:0 10px 24px rgba(0,0,2,.5);
+  --card-w:240px;
+  --card-gap:16px;
+}
+
+/* ---------- BASE ---------- */
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- LOVE HEARTS ---------- */
+.heart {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  background-color: var(--neon);
+  top: -30px;
+  transform: rotate(-45deg);
+  animation: fall 2.5s linear forwards;
+  pointer-events:none;
+  z-index:1000;
+}
+.heart::before,
+.heart::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: var(--neon);
+  border-radius: 50%;
+}
+.heart::before {
+  top: -10px;
+  left: 0;
+}
+.heart::after {
+  left: 10px;
+  top: 0;
+}
+@keyframes fall {
+  0% {
+    top: -30px;
+    opacity: 1;
+  }
+  100% {
+    top: 100vh;
+    opacity: 0;
+  }
+}
+
+/* ---------- FLOATING PARTICLES ---------- */
+@keyframes floatRandom{
+  0%{transform:translateY(120vh) translateX(0) rotate(0deg) scale(1);opacity:.8}
+  25%{transform:translateY(90vh) translateX(-30px) rotate(90deg) scale(1.1);opacity:1}
+  50%{transform:translateY(60vh) translateX(40px) rotate(180deg) scale(.9);opacity:.9}
+  75%{transform:translateY(30vh) translateX(-20px) rotate(270deg) scale(1.05);opacity:1}
+  100%{transform:translateY(-120px) translateX(60px) rotate(360deg) scale(1);opacity:.7}
+}
+.particle{
+  position:fixed;
+  pointer-events:none;
+  z-index:-1;
+  animation:floatRandom 30s infinite linear;
+}
+
+/* ---------- HEADER ---------- */
+header{
+  position:sticky;top:0;z-index:200;
+  background:rgba(17,17,17,.5);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo img{height:32px;filter:drop-shadow(0 0 6px var(--primary))}
+nav{display:flex;gap:10px 18px;font-size:.9rem;flex-wrap:wrap}
+nav a{
+  color:var(--subtle);
+  text-decoration:none;
+  padding:6px 14px;
+  border-radius:20px;
+  border:1px solid transparent;
+  transition:all .3s;
+  position:relative;
+}
+nav a:hover{
+  color:var(--primary);
+  border-color:var(--primary);
+  box-shadow:0 0 12px rgba(255,107,107,.45);
+  transform:translateY(-2px)
+}
+
+/* ---------- HERO ---------- */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:0 20px;
+  background:radial-gradient(circle at 50% 50%,rgba(255,107,107,.08),transparent 70%),
+             linear-gradient(135deg,var(--bg) 0%, 1a0000 100%);
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:"";
+  position:absolute;inset:0;z-index:0;opacity:.04;
+  background-image:url('data:image/svg+xml;utf8,\
+    <svg xmlns="://www.w3.org/2000/svg" viewBox="0 0 200 200">\
+    <filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="3" stitchTiles="stitch"/></filter>\
+    <rect width="100%" height="100%" filter="url(%23n)"/></svg>');
+  animation:grain 8s steps(10) infinite;
+}
+@keyframes grain{
+  0%,100%{transform:translate(0,0)}
+  10%{transform:translate(-5%,-5%)}30%{transform:translate(3%,-7%)}
+  50%{transform:translate(-7%,4%)}70%{transform:translate(5%,6%)}90%{transform:translate(-3%,-3%)}
+}
+.hero-content{z-index:2}
+.hero img{
+  width:clamp(180px,40vw,380px);
+  margin-bottom:24px;
+  filter:drop-shadow(0 0 24px rgba(255,107,107,.45));
+  animation:float 4s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}
+}
+.typing{font-size:clamp(1.1rem,2.5vw,1.6rem);color:var(--subtle);min-height:34px;margin-bottom:12px}
+.clock{font-size:clamp(.8rem,2vw,1rem);color:var(--muted);margin-bottom:32px}
+.cta-group{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.cta{
+  background:var(--primary);
+  color:#fff;
+  padding:10px 24px;
+  border-radius:30px;
+  font-weight:600;
+  font-size:.9rem;
+  text-decoration:none;
+  transition:.3s;
+  box-shadow:0 0 16px rgba(255,107,107,.35);
+}
+.cta:hover{transform:translateY(-3px);box-shadow:0 6px 24px rgba(255,107,107,.55)}
+.cta-outline{
+  background:transparent;
+  color:var(--primary);
+  border:1px solid var(--primary);
+  box-shadow:none;
+}
+.cta-outline:hover{background:var(--primary);color:#fff}
+
+/* ---------- LOVE BUTTON ---------- */
+.love-button{
+  background:linear-gradient(45deg, var(--neon), var(--primary));
+  color:#fff;
+  padding:12px 28px;
+  border-radius:30px;
+  font-weight:600;
+  font-size:1rem;
+  text-decoration:none;
+  transition:.3s;
+  box-shadow:0 0 20px rgba(255,71,87,.4);
+  cursor:pointer;
+  border:none;
+  margin-top:20px;
+}
+.love-button:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 8px 30px rgba(215,71,87,.6)}
+.love-button:active{transform:translateY(0) scale(1);}
+
+/* ---------- LAYOUT ---------- */
+.container{max-width:1100px;margin:auto;padding:20px}
+section{padding:70px 0}
+.grid{display:grid;gap:var(--card-gap);grid-template-columns:repeat(auto-fit,minmax(var(--card-w),1fr))}
+
+/* ---------- SCROLL GRID ---------- */
+.grid.scroll{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  padding-bottom:12px;
+  max-width:100vw;
+}
+.grid.scroll .card{
+  flex:0 0 var(--card-w);
+  scroll-snap-align:start;
+}
+
+/* ---------- CARD ---------- */
+.card{
+  background:var(--surface);
+  border-radius:16px;overflow:hidden;
+  border:1px solid var(--border);
+  transition:transform .4s,box-shadow .4s,opacity .6s;
+  opacity:0;
+  transform:translateY(30px) scale(.95);
+}
+.card.show{opacity:1;transform:translateY(0) scale(1)}
+.card.hide{opacity:0;transform:translateY(30px) scale(.95)}
+.card:hover{
+  transform:translateY(-8px) scale(1.02);
+  box-shadow:0 0 20px rgba(255,107,107,.25),var(--shadow);
+}
+.card img{width:100%;height:150px;object-fit:cover;transition:transform .4s}
+.card:hover img{transform:scale(1.1)}
+.card-body{padding:18px}
+.card-title{font-size:1rem;margin-bottom:6px;color:#fff;font-weight:600}
+.card-desc{font-size:.8rem;color:var(--subtle);margin-bottom:14px}
+.btn{
+  display:inline-block;background:var(--primary);color:#fff;
+  padding:6px 16px;border-radius:20px;font-size:.75rem;font-weight:600;
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(255,107,107,.4)}
+.btn:active{transform:translateY(0)}
+
+/* ---------- SECTION HEADERS ---------- */
+.section-header{text-align:center;margin-bottom:40px}
+.section-header h2{
+  font-size:clamp(1.8rem,4vw,2.4rem);
+  margin-bottom:12px;
+  background:linear-gradient(90deg,var(--primary),var(--neon));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  display:inline-block;
+}
+.section-header p{color:var(--subtle);max-width:600px;margin:0 auto;font-size:.9rem}
+
+/* ---------- SOCIAL ---------- */
+#social .social-links{
+  display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:18px;
+}
+#social .social-links a{
+  width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
+  background:var(--surface);font-size:1.2rem;transition:.3s;
+  border:1px solid var(--border); color: white;
+}
+#social .social-links a:hover{
+  transform:translateY(-3px) scale(1.1);background:var(--primary);color:#fff;
+  box-shadow:0 4px 12px rgba(255,107,107,.3);
+}
+
+/* ---------- FOOTER ---------- */
+footer{text-align:center;padding:24px 0;font-size:.75rem;color:var(--muted)}
+
+/* ---------- BACK-TO-TOP ---------- */
+#backToTop{
+  position:fixed;bottom:20px;right:20px;
+  background:var(--primary);color:#fff;width:40px;height:40px;
+  border-radius:50%;display:grid;place-items:center;font-size:1rem;
+  opacity:0;visibility:hidden;transition:.4s;cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+}
+#backToTop.show{opacity:1;visibility:visible}
+#backToTop:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(255,107,107,.4)}
+
+/* ---------- SCROLL INDICATOR ---------- */
+#scrollIndicator{
+  position:fixed;top:0;left:0;height:3px;background:var(--primary);z-index:300;
+  width:0;transition:width .1s;
+}
+
+@media(max-width:768px){
+  :root{
+    --card-w:200px;
+    --card-gap:12px;
+  }
+  .hero img{max-width:200px}
+  .section-header h2{font-size:1.5rem}
+  nav{gap:8px 12px;font-size:.8rem}
+}
+
+@media(max-width:480px){
+  :root{
+    --card-w:160px;
+  }
+  .grid.scroll .card{flex:0 0 var(--card-w)}
+}
+</style>
+</head>
+<body>
+
+<!-- ---------- FLOATING PARTICLES ---------- -->
+<div id="particleContainer"></div>
+
+
+<!-- ---------- HEADER ---------- -->
+<header>
+  <div class="logo">
+    <img src="5.jpg" alt="Kita Ikuyo">
+  </div>
+  <nav>
+    <a href="#about">Tentang Kita ikuyoooooooooooooo</a>
+    <a href="#portfolio">Kitaaaaaaaaaaaaaaaaaaaaaa</a>
+    <a href="#websites">Kitaaaaaaaaaaaaaaaaaaaaaaa</a>
+    <a href="#social">Sosial</a>
+    <a href="#contact">Kontak</a>
+  </nav>
+</header>
+
+<!-- ---------- HERO ---------- -->
+<section class="hero">
+  <div class="hero-content">
+    <img src="5.jpg" alt="Kita Ikuyo">
+    <div class="typing" id="typing"></div>
+    <div class="clock" id="clock"></div>
+    <div class="cta-group">
+      <a class="cta" href="#portfolio">Kitaaaaaaaaaaaaaaaaaaaaaa</a>
+      <a class="cta cta-outline" href="#contact">Tukeran Link</a>
+    </div>
+    <button class="love-button" onclick="handleLoveClick()">❤️ Klik untuk Love Berjatuhan</button>
+  </div>
+</section>
+
+<!-- ---------- ABOUT ---------- -->
+<section id="about">
+  <div class="container">
+    <div class="section-header">
+      <h2>Tentang Saya</h2>
+      <p>Halo! Saya Ikuyo Kitaaaaaaaaaaaaaaaaaaaaaaaa — pacarku anime walau ga ada yang nanya. kalo pacar kalian terserah peduli apa gue ga nanya ga peduli. Jangan lupa tukeran link ya! ne~pah!?</p>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- PORTFOLIO ---------- -->
+<section id="portfolio">
+  <div class="container">
+    <div class="section-header">
+      <h2>Kitaaaaaaaaaaaaaaaaaaaaaa</h2>
+      <p>Kitaaaaaaaaaaaaaaaaaaaaaaaa</p>
+    </div>
+    <div class="grid scroll" id="portfolio-grid">
+      <div class="card" data-portfolio>
+        <img src="pecone2.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Pemburik Gambar</h3>
+          <p class="card-desc">Kompres & edit gambar.</p>
+          <a class="btn" href="https://deltazexis.vercel.app/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-portfolio>
+        <img src="pecone2.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">kita ikuyo</h3>
+          <p class="card-desc">Ga peduli.</p>
+          <a class="btn" href="https://delt-a.vercel.app/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-portfolio>
+        <img src="pecone2.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Versi</h3>
+          <p class="card-desc">Tampilan</p>
+          <a class="btn" href="https://aelta-liart.vercel.app/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- WEBSITES ---------- -->
+<section id="websites">
+  <div class="container">
+    <div class="section-header">
+      <h2>Kita ikuyo</h2>
+      <p>bingung coccoknya pake warna apa</p>
+    </div>
+    <div class="grid scroll" id="websites-grid">
+      <!-- 12 card -->
+      <div class="card" data-website>
+        <img src="pecone1.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Goddess of Destruction</h3>
+          <p class="card-desc">My Bini.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/itsukashiorii-Goddes-of-destruction-Goddess-of-creation/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone3.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Akayashi Funayuurei</h3>
+          <p class="card-desc">Rooowrrr.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/akayashi_-funayuurei_./" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone4.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Reine</h3>
+          <p class="card-desc">IkutoKita.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/reine/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone6.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Itsuka</h3>
+          <p class="card-desc">Kita Ikuyo.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/Itsuka/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone7.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Itsukashiorii</h3>
+          <p class="card-desc">Kita Ikuyo.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/itsukashiorii/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone8.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Fushinana</h3>
+          <p class="card-desc">IkuyoKita.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/Fushinana-/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone1.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Necryuu</h3>
+          <p class="card-desc">Kita Ikuyo.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/Necryuu/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone2.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">1sl4_o02.v02</h3>
+          <p class="card-desc">Kita Ikuyo.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/1sl4_o02.v02/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone3.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">1sl4_o02.v2</h3>
+          <p class="card-desc">Rkooowr. sebelumnya.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/1sl4_o02.v2/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone4.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Tokisaki Kurumi</h3>
+          <p class="card-desc">kita ikuyo.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/TokisakiKurumi/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone6.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Deltazexis</h3>
+          <p class="card-desc">Pemburik Gambar.</p>
+          <a class="btn" href="https://deltazexis.vercel.app/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone7.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Delt-a</h3>
+          <p class="card-desc">Versi Tradisional Jepang.</p>
+          <a class="btn" href="https://delt-a.vercel.app/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- SOSIAL ---------- -->
+<section id="social">
+  <div class="container">
+    <div class="section-header">
+      <h2>Sosial Media</h2>
+      <p>Follow & tukeran link di sini yaa~</p>
+    </div>
+    <div class="social-links">
+      <a href="https://www.tiktok.com/@kuil.aberuniyu._" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+      <a href="https://www.instagram.com/kitaikuyo1700?igsh=MWJuazRxYjltaTRsNw==" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://www.facebook.com/profile.php?id=61579317030806" target="_blank" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+      <a href="https://pin.it/2rCPZpTjE" target="_blank" title="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
+      <a href="https://x.com/Kazukikazami03" target="_blank" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- KONTAK ---------- -->
+<section id="contact">
+  <div class="container">
+    <div class="section-header">
+      <h2>Kontak</h2>
+      <p>kita</p>
+    </div>
+    <a class="btn" style="margin-top:12px;display:inline-flex;align-items:center;gap:6px;background:#25d366;color:#000;padding:8px 18px;border-radius:24px;font-weight:600" href="https://wa.me/6285198180371" target="_blank">
+      <i class="fa-brands fa-whatsapp"></i> WhatsApp
+    </a>
+  </div>
+</section>
+
+<!-- ---------- FOOTER ---------- -->
+<footer>© <span id="year"></span> Kita Ikuyo • All rights reserved.</footer>
+
+<!-- ---------- BACK-TO-TOP ---------- -->
+<div id="backToTop"><i class="fa-solid fa-arrow-up"></i></div>
+
+<!-- ---------- SCROLL INDICATOR ---------- -->
+<div id="scrollIndicator"></div>
+
+<script>
+/* ---------- LOVE HEARTS FUNCTION ---------- */
+let clickCount = 0;
+let clickTimer;
+let audioContext;
+
+function spawnHeart() {
+  const heart = document.createElement('div');
+  heart.classList.add('heart');
+  heart.style.left = Math.random() * window.innerWidth + 'px';
+  document.body.appendChild(heart);
+
+  playAudio();
+
+  setTimeout(() => {
+    heart.remove();
+  }, 2500);
+}
+
+function playAudio() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  fetch('rawr.mp3')
+    .then(response => response.arrayBuffer())
+    .then(data => audioContext.decodeAudioData(data))
+    .then(buffer => {
+      const source = audioContext.createBufferSource();
+      const gainNode = audioContext.createGain();
+
+      gainNode.gain.value = 10; // Volume 10x lebih keras
+      
+      source.buffer = buffer;
+      source.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      source.start(0);
+    })
+    .catch(error => {
+      console.log('Audio file not found, using beep sound instead');
+      // Fallback ke suara beep sederhana jika file tidak ditemukan
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.1);
+    });
+}
+
+function handleLoveClick() {
+  clickCount++;
+  
+  if (clickCount === 1) {
+    clickTimer = setTimeout(() => {
+      clickCount = 0;
+    }, 2000);
+  }
+  
+  if (clickCount >= 5) {
+    clearTimeout(clickTimer);
+    clickCount = 0;
+    
+    // Start heart rain
+    const heartRain = setInterval(() => {
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => spawnHeart(), i * 100);
+      }
+    }, 500);
+    
+    // Stop after 10 seconds
+    setTimeout(() => {
+      clearInterval(heartRain);
+    }, 10000);
+  } else {
+    spawnHeart();
+  }
+}
+
+/* ---------- PARTICLE FLOATING ---------- */
+const particleContainer=document.getElementById('particleContainer');
+const particleImages=['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg','7.jpg','8.jpg','9.jpg','10.jpg','11.jpg','12.jpg','13.jpg','14.jpg','15.jpg',];
+function createParticle(){
+  const img=document.createElement('img');
+  img.src=particleImages[Math.floor(Math.random()*particleImages.length)];
+  img.className='particle';
+  img.style.left=Math.random()*100+'%';
+  img.style.animationDuration=(20+Math.random()*15)+'s';
+  img.style.width=(50+Math.random()*50)+'px';
+  particleContainer.appendChild(img);
+  setTimeout(()=>img.remove(),35000);
+}
+setInterval(createParticle,2000);
+
+/* ---------- SCROLL FADE IN/OUT ---------- */
+const fadeObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.remove('hide');
+      entry.target.classList.add('show');
+    }else{
+      entry.target.classList.remove('show');
+      entry.target.classList.add('hide');
+    }
+  });
+},{threshold:.1});
+document.querySelectorAll('.card').forEach(card=>{
+  card.classList.add('hide');
+  fadeObserver.observe(card);
+});
+
+/* ---------- TYPING EFFECT ---------- */
+const txts=["kita","ikuyo","ne~pah"];
+let i=0,c=0,s=!0;
+function type(){
+  const t=txts[i];
+  document.getElementById('typing').textContent=s?t.substring(0,c+1):t.substring(0,c-1);
+  s?c++:c--;
+  if(c===t.length+1&&s){s=!1;setTimeout(type,1500);return}
+  if(c===0&&!s){s=!0;i=(i+1)%txts.length}
+  setTimeout(type,s?120:60);
+}
+type();
+
+/* ---------- LIVE CLOCK ---------- */
+let startTime=parseInt(localStorage.getItem('startTime')||'0',10);
+if(!startTime){startTime=Date.now();localStorage.setItem('startTime',startTime)}
+function updateClock(){
+  const elapsed=Date.now()-startTime;
+  const totalSec=Math.floor(elapsed/1000);
+  const h=String(Math.floor(totalSec/3600)).padStart(2,'0');
+  const m=String(Math.floor((totalSec%3600)/60)).padStart(2,'0');
+  const s=String(totalSec%60).padStart(2,'0');
+  document.getElementById('clock').textContent=`${h}:${m}:${s}`;
+}
+updateClock();setInterval(updateClock,1000);
+
+/* ---------- BACK-TO-TOP ---------- */
+const btt=document.getElementById('backToTop');
+window.onscroll=()=>window.scrollY>300?btt.classList.add('show'):btt.classList.remove('show');
+btt.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+
+/* ---------- SCROLL INDICATOR ---------- */
+const scrollIndicator=document.getElementById('scrollIndicator');
+window.addEventListener('scroll',()=>{
+  const win=document.body.scrollTop||document.documentElement.scrollTop;
+  const height=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+  const scrolled=(win/height)*100;
+  scrollIndicator.style.width=scrolled+'%';
+});
+
+/* ---------- AUTO YEAR ---------- */
+document.getElementById('year').textContent=new Date().getFullYear();
+
+/* ---------- SMOOTH SCROLL ANCHOR ---------- */
+document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+  anchor.addEventListener('click',function(e){
+    e.preventDefault();
+    const target=document.querySelector(this.getAttribute('href'));
+    if(target){
+      target.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  });
+});
+</script>
+</body>
+</html>

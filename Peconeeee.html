@@ -1,0 +1,2460 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Kita Ikuyo</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+<link rel="icon" href="5.jpg" type="image/png"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* ---------- RESET ---------- */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+/* ---------- VARIABLES ---------- */
+:root{
+  --primary:#f6b;
+  --neon:#ff4757;
+  --bg:#0d0d0d;
+  --surface:#111;
+  --surface-light:#1a1a1a;
+  --surface-lighter:#222;
+  --text:#e5e5e5;
+  --muted:#888;
+  --subtle:#aaa;
+  --border:rgba(255,255,255,.07);
+  --shadow:0 10px 24px rgba(0,0,2,.5);
+  --card-w:300px;
+  --card-gap:16px;
+}
+
+/* ---------- BASE ---------- */
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- LOADING FIX ---------- */
+body {
+  opacity: 1 !important;
+  transition: none !important;
+}
+
+/* ---------- LOVE HEARTS ---------- */
+.heart {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  background-color: var(--neon);
+  top: -30px;
+  transform: rotate(-45deg);
+  animation: fall 2.5s linear forwards;
+  pointer-events:none;
+  z-index:1000;
+}
+.heart::before,
+.heart::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: var(--neon);
+  border-radius: 50%;
+}
+.heart::before {
+  top: -10px;
+  left: 0;
+}
+.heart::after {
+  left: 10px;
+  top: 0;
+}
+@keyframes fall {
+  0% {
+    top: -30px;
+    opacity: 1;
+  }
+  100% {
+    top: 100vh;
+    opacity: 0;
+  }
+}
+
+/* ---------- FLOATING PARTICLES ---------- */
+@keyframes floatRandom{
+  0%{transform:translateY(120vh) translateX(0) rotate(0deg) scale(1);opacity:.8}
+  25%{transform:translateY(90vh) translateX(-30px) rotate(90deg) scale(1.1);opacity:1}
+  50%{transform:translateY(60vh) translateX(40px) rotate(180deg) scale(.9);opacity:.9}
+  75%{transform:translateY(30vh) translateX(-20px) rotate(270deg) scale(1.05);opacity:1}
+  100%{transform:translateY(-120px) translateX(60px) rotate(360deg) scale(1);opacity:.7}
+}
+.particle{
+  position:fixed;
+  pointer-events:none;
+  z-index:-1;
+  animation:floatRandom 30s infinite linear;
+}
+
+/* ---------- HAMBURGER MENU & SIDEBAR ---------- */
+.hamburger {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  z-index: 1001;
+  transition: all .3s;
+}
+.hamburger:hover {
+  background: var(--surface-light);
+  box-shadow: 0 4px 16px rgba(255,107,107,.2);
+}
+.hamburger span {
+  width: 24px;
+  height: 2px;
+  background: var(--text);
+  transition: all .3s;
+}
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 380px;
+  height: 100vh;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  z-index: 1000;
+  transition: right .4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+}
+.sidebar.active {
+  right: 0;
+}
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,.7);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all .3s;
+}
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ---------- AUDIO PLAYER IN SIDEBAR ---------- */
+.audio-sidebar {
+  padding: 80px 24px 24px;
+}
+.audio-sidebar h3 {
+  font-size: 1.3rem;
+  margin-bottom: 24px;
+  background: linear-gradient(90deg, var(--primary), var(--neon));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+}
+.sidebar-player {
+  background: var(--surface-light);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.sidebar-player::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--neon));
+  opacity: 0;
+  transition: opacity .3s;
+}
+.sidebar-player:hover::before {
+  opacity: 1;
+}
+.player-info {
+  margin-bottom: 16px;
+}
+.player-title {
+  font-size: .9rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+.player-artist {
+  font-size: .8rem;
+  color: var(--subtle);
+}
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.player-play-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, var(--neon), var(--primary));
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .3s;
+  font-size: 1rem;
+}
+.player-play-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px rgba(255,71,87,.4);
+}
+.player-progress {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,.1);
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.player-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--neon));
+  border-radius: 2px;
+  width: 0%;
+  transition: width .1s;
+}
+.player-time {
+  font-size: .7rem;
+  color: var(--muted);
+  min-width: 32px;
+  text-align: center;
+}
+.player-volume {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.player-volume-icon {
+  color: var(--subtle);
+  font-size: .9rem;
+  cursor: pointer;
+  transition: color .3s;
+}
+.player-volume-icon:hover {
+  color: var(--primary);
+}
+.player-volume-slider {
+  flex: 1;
+  height: 3px;
+  background: rgba(255,255,255,.1);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+.player-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--primary);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all .3s;
+}
+.player-volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 6px rgba(255,107,107,.5);
+}
+
+/* ---------- ENHANCED IMAGE GALLERY WITH SLIDER ---------- */
+.image-gallery-section {
+  padding: 70px 0;
+  background: linear-gradient(135deg, var(--surface) 0%, rgba(26,0,0,.8) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.gallery-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.gallery-title {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  margin-bottom: 12px;
+  background: linear-gradient(90deg, var(--primary), var(--neon));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+.gallery-subtitle {
+  color: var(--subtle);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.image-slider-container {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 60px;
+}
+.image-slider {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 20px;
+}
+.slider-item {
+  flex: 0 0 calc(33.333% - 14px);
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--surface-light);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+.slider-item:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(255,107,107,.3);
+}
+.slider-item img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.slider-item:hover img {
+  transform: scale(1.1);
+}
+.slider-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,71,87,.9), rgba(255,107,107,.9));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.slider-item:hover .slider-overlay {
+  opacity: 1;
+}
+.slider-overlay-icon {
+  font-size: 3rem;
+  color: white;
+  margin-bottom: 12px;
+  transform: scale(0);
+  transition: transform 0.3s ease;
+}
+.slider-item:hover .slider-overlay-icon {
+  transform: scale(1);
+}
+.slider-overlay-text {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+.slider-item:hover .slider-overlay-text {
+  transform: translateY(0);
+}
+.slider-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+.slider-nav:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 0 20px rgba(255,107,107,.5);
+}
+.slider-nav.prev {
+  left: -25px;
+}
+.slider-nav.next {
+  right: -25px;
+}
+.slider-nav i {
+  color: var(--text);
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+.slider-nav:hover i {
+  color: white;
+}
+.slider-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+.slider-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.slider-indicator.active {
+  background: var(--primary);
+  transform: scale(1.2);
+}
+
+/* ---------- HEADER ---------- */
+header{
+  position:sticky;top:0;z-index:200;
+  background:rgba(17,17,17,.5);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo img{height:32px;filter:drop-shadow(0 0 6px var(--primary))}
+nav{display:flex;gap:10px 18px;font-size:.9rem;flex-wrap:wrap}
+nav a{
+  color:var(--subtle);
+  text-decoration:none;
+  padding:6px 14px;
+  border-radius:20px;
+  border:1px solid transparent;
+  transition:all .3s;
+  position:relative;
+}
+nav a:hover{
+  color:var(--primary);
+  border-color:var(--primary);
+  box-shadow:0 0 12px rgba(255,107,107,.45);
+  transform:translateY(-2px)
+}
+
+/* ---------- HERO ---------- */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:0 20px;
+  background:radial-gradient(circle at 50% 50%,rgba(255,107,107,.08),transparent 70%),
+             linear-gradient(135deg,var(--bg) 0%, 1a0000 100%);
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:"";
+  position:absolute;inset:0;z-index:0;opacity:.04;
+  background-image:url('data:image/svg+xml;utf8,\
+    <svg xmlns="://www.w3.org/2000/svg" viewBox="0 0 200 200">\
+    <filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="3" stitchTiles="stitch"/></filter>\
+    <rect width="100%" height="100%" filter="url(%23n)"/></svg>');
+  animation:grain 8s steps(10) infinite;
+}
+@keyframes grain{
+  0%,100%{transform:translate(0,0)}
+  10%{transform:translate(-5%,-5%)}30%{transform:translate(3%,-7%)}
+  50%{transform:translate(-7%,4%)}70%{transform:translate(5%,6%)}90%{transform:translate(-3%,-3%)}
+}
+.hero-content{z-index:2}
+.hero img{
+  width:clamp(180px,40vw,380px);
+  margin-bottom:24px;
+  filter:drop-shadow(0 0 24px rgba(255,107,107,.45));
+  animation:float 4s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}
+}
+.typing{font-size:clamp(1.1rem,2.5vw,1.6rem);color:var(--subtle);min-height:34px;margin-bottom:12px}
+.clock{font-size:clamp(.8rem,2vw,1rem);color:var(--muted);margin-bottom:32px}
+.cta-group{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.cta{
+  background:var(--primary);
+  color:#fff;
+  padding:10px 24px;
+  border-radius:30px;
+  font-weight:600;
+  font-size:.9rem;
+  text-decoration:none;
+  transition:.3s;
+  box-shadow:0 0 16px rgba(255,107,107,.35);
+}
+.cta:hover{transform:translateY(-3px);box-shadow:0 6px 24px rgba(255,107,107,.55)}
+.cta-outline{
+  background:transparent;
+  color:var(--primary);
+  border:1px solid var(--primary);
+  box-shadow:none;
+}
+.cta-outline:hover{background:var(--primary);color:#fff}
+
+/* ---------- LOVE BUTTON ---------- */
+.love-button{
+  background:linear-gradient(45deg, var(--neon), var(--primary));
+  color:#fff;
+  padding:12px 28px;
+  border-radius:30px;
+  font-weight:600;
+  font-size:1rem;
+  text-decoration:none;
+  transition:.3s;
+  box-shadow:0 0 20px rgba(255,71,87,.4);
+  cursor:pointer;
+  border:none;
+  margin-top:20px;
+}
+.love-button:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 8px 30px rgba(215,71,87,.6)}
+.love-button:active{transform:translateY(0) scale(1);}
+
+/* ---------- LAYOUT ---------- */
+.container{max-width:1100px;margin:auto;padding:20px}
+section{padding:70px 0}
+.grid{display:grid;gap:var(--card-gap);grid-template-columns:repeat(auto-fit,minmax(var(--card-w),1fr))}
+
+/* ---------- SCROLL GRID ---------- */
+.grid.scroll{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  padding-bottom:12px;
+  max-width:100vw;
+}
+.grid.scroll .card{
+  flex:0 0 var(--card-w);
+  scroll-snap-align:start;
+}
+
+/* ---------- CARD ---------- */
+.card{
+  background:var(--surface);
+  border-radius:16px;overflow:hidden;
+  border:1px solid var(--border);
+  transition:transform .4s,box-shadow .4s,opacity .6s;
+  opacity:0;
+  transform:translateY(30px) scale(.95);
+}
+.card.show{opacity:1;transform:translateY(0) scale(1)}
+.card.hide{opacity:0;transform:translateY(30px) scale(.95)}
+.card:hover{
+  transform:translateY(-8px) scale(1.02);
+  box-shadow:0 0 20px rgba(255,107,107,.25),var(--shadow);
+}
+.card img{width:100%;height:150px;object-fit:cover;transition:transform .4s}
+.card:hover img{transform:scale(1.1)}
+.card-body{padding:18px}
+.card-title{font-size:1rem;margin-bottom:6px;color:#fff;font-weight:600}
+.card-desc{font-size:.8rem;color:var(--subtle);margin-bottom:14px}
+.btn{
+  display:inline-block;background:var(--primary);color:#fff;
+  padding:6px 16px;border-radius:20px;font-size:.75rem;font-weight:600;
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(255,107,107,.4)}
+.btn:active{transform:translateY(0)}
+
+/* ---------- SECTION HEADERS ---------- */
+.section-header{text-align:center;margin-bottom:40px}
+.section-header h2{
+  font-size:clamp(1.8rem,4vw,2.4rem);
+  margin-bottom:12px;
+  background:linear-gradient(90deg,var(--primary),var(--neon));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  display:inline-block;
+}
+.section-header p{color:var(--subtle);max-width:600px;margin:0 auto;font-size:.9rem}
+
+/* ---------- SOCIAL ---------- */
+#social .social-links{
+  display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:18px;
+}
+#social .social-links a{
+  width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
+  background:var(--surface);font-size:1.2rem;transition:.3s;
+  border:1px solid var(--border); color: white;
+}
+#social .social-links a:hover{
+  transform:translateY(-3px) scale(1.1);background:var(--primary);color:#fff;
+  box-shadow:0 4px 12px rgba(255,107,107,.3);
+}
+
+/* ---------- FOOTER ---------- */
+footer{text-align:center;padding:24px 0;font-size:.75rem;color:var(--muted)}
+
+/* ---------- BACK-TO-TOP ---------- */
+#backToTop{
+  position:fixed;bottom:20px;right:20px;
+  background:var(--primary);color:#fff;width:40px;height:40px;
+  border-radius:50%;display:grid;place-items:center;font-size:1rem;
+  opacity:0;visibility:hidden;transition:.4s;cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+}
+#backToTop.show{opacity:1;visibility:visible}
+#backToTop:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(255,107,107,.4)}
+
+/* ---------- SCROLL INDICATOR ---------- */
+#scrollIndicator{
+  position:fixed;top:0;left:0;height:3px;background:var(--primary);z-index:300;
+  width:0;transition:width .1s;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:1200px){
+  .video-card-modern {
+    flex: 0 0 400px;
+  }
+}
+
+@media(max-width:768px){
+  :root{
+    --card-w:280px;
+    --card-gap:12px;
+  }
+  .hero img{max-width:200px}
+  .section-header h2{font-size:1.5rem}
+  nav{gap:8px 12px;font-size:.8rem}
+  .sidebar {
+    width: 320px;
+    right: -320px;
+  }
+  .slider-item {
+    flex: 0 0 calc(50% - 10px);
+  }
+  .video-container-modern {
+    padding: 0 20px;
+  }
+  .video-scroll-container {
+    padding: 20px 60px;
+  }
+  .video-card-modern {
+    flex: 0 0 350px;
+  }
+  .video-controls-modern {
+    padding: 25px 20px 20px;
+  }
+  .video-title-modern {
+    font-size: 1.2rem;
+  }
+}
+
+@media(max-width:480px){
+  :root{
+    --card-w:260px;
+  }
+  .grid.scroll .card{flex:0 0 var(--card-w)}
+  .sidebar {
+    width: 100%;
+    right: -100%;
+  }
+  .slider-item {
+    flex: 0 0 calc(100% - 10px);
+  }
+  .image-slider-container {
+    padding: 0 40px;
+  }
+  .slider-nav.prev {
+    left: -15px;
+  }
+  .slider-nav.next {
+    right: -15px;
+  }
+  .video-card-modern {
+    flex: 0 0 300px;
+  }
+  .video-scroll-container {
+    padding: 20px 40px;
+  }
+  .video-controls-modern {
+    padding: 20px 15px 15px;
+  }
+  .video-title-modern {
+    font-size: 1.1rem;
+  }
+  .video-controls-row {
+    gap: 15px;
+  }
+}
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ---------- LIGHTBOX FOR IMAGES ---------- */
+.image-lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.image-lightbox.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,.9);
+  backdrop-filter: blur(10px);
+}
+
+.lightbox-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0,0,0,.5);
+}
+
+.lightbox-image {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  transition: opacity 0.3s ease;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 50%;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.lightbox-close:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  transform: scale(1.1);
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.lightbox-nav:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.lightbox-nav.prev {
+  left: 20px;
+}
+
+.lightbox-nav.next {
+  right: 20px;
+}
+
+.lightbox-nav i {
+  font-size: 1.2rem;
+}
+
+/* ---------- VIDEO GALLERY SECTION ---------- */
+.video-gallery-section {
+  padding: 70px 0;
+  background: linear-gradient(135deg, var(--surface) 0%, rgba(26,0,0,.8) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.video-card {
+  background: var(--surface);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: transform .4s, box-shadow .4s, opacity .6s;
+  opacity: 0;
+  transform: translateY(30px) scale(.95);
+  flex: 0 0 var(--card-w);
+  scroll-snap-align: start;
+}
+
+.video-card.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.video-card.hide {
+  opacity: 0;
+  transform: translateY(30px) scale(.95);
+}
+
+.video-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 0 20px rgba(255,107,107,.25), var(--shadow);
+}
+
+.video-card.playing {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 0 20px rgba(255,107,107,.25), var(--shadow);
+}
+
+.video-thumbnail {
+  position: relative;
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.video-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .4s;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.video-player {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  display: none;
+  background: #000;
+}
+
+.video-card.playing .video-player {
+  display: block;
+}
+
+.video-card.playing .video-thumbnail img {
+  display: none;
+}
+
+.video-card:hover .video-thumbnail img {
+  transform: scale(1.1);
+}
+
+.video-play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,71,87,.7), rgba(255,107,107,.7));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 3;
+}
+
+.video-card:hover .video-play-overlay {
+  opacity: 1;
+}
+
+.video-card.playing .video-play-overlay {
+  display: none;
+}
+
+.play-icon {
+  width: 50px;
+  height: 50px;
+  fill: white;
+  transform: scale(0);
+  transition: transform 0.3s ease;
+}
+
+.video-card:hover .play-icon {
+  transform: scale(1);
+}
+
+.video-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.video-play-btn, .video-mute-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, var(--neon), var(--primary));
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .3s;
+  padding: 0;
+}
+
+.video-play-btn:hover, .video-mute-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px rgba(255,71,87,.4);
+}
+
+.control-icon {
+  width: 16px;
+  height: 16px;
+  fill: white;
+}
+
+.video-progress {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,.1);
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.video-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--neon));
+  border-radius: 2px;
+  width: 0%;
+  transition: width .1s;
+}
+
+.video-time {
+  font-size: .7rem;
+  color: var(--muted);
+  min-width: 32px;
+  text-align: center;
+}
+
+/* Responsive untuk video card */
+@media(max-width:768px) {
+  .video-card {
+    flex: 0 0 280px;
+  }
+}
+
+@media(max-width:480px) {
+  .video-card {
+    flex: 0 0 260px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ---------- FLOATING PARTICLES ---------- -->
+<div id="particleContainer"></div>
+
+<!-- ---------- HAMBURGER MENU ---------- -->
+<button class="hamburger" id="hamburger">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+<!-- ---------- SIDEBAR OVERLAY ---------- -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ---------- SIDEBAR WITH AUDIO PLAYER ---------- -->
+<aside class="sidebar" id="sidebar">
+  <div class="audio-sidebar">
+    <h3>Now Playing</h3>
+    
+    <div class="sidebar-player" data-player="1">
+      <div class="player-info">
+        <div class="player-title">Ne~Pah Theme</div>
+        <div class="player-artist">Kita Ikuyo</div>
+      </div>
+      <div class="player-controls">
+        <button class="player-play-btn" data-play="play">
+          <i class="fas fa-play"></i>
+        </button>
+        <div class="player-progress" data-progress>
+          <div class="player-progress-bar"></div>
+        </div>
+        <span class="player-time" data-time>0:00</span>
+      </div>
+      <div class="player-volume">
+        <i class="fas fa-volume-down player-volume-icon" data-volume-icon></i>
+        <input type="range" class="player-volume-slider" data-volume min="0" max="100" value="50">
+      </div>
+      <audio preload="metadata" data-audio-file>
+        <source src="audio1.mp3" type="audio/mpeg">
+        <source src="audio1.ogg" type="audio/ogg">
+      </audio>
+    </div>
+
+    <div class="sidebar-player" data-player="2">
+      <div class="player-info">
+        <div class="player-title">Anime Vibes</div>
+        <div class="player-artist">Various Artists</div>
+      </div>
+      <div class="player-controls">
+        <button class="player-play-btn" data-play="play">
+          <i class="fas fa-play"></i>
+        </button>
+        <div class="player-progress" data-progress>
+          <div class="player-progress-bar"></div>
+        </div>
+        <span class="player-time" data-time>0:00</span>
+      </div>
+      <div class="player-volume">
+        <i class="fas fa-volume-down player-volume-icon" data-volume-icon></i>
+        <input type="range" class="player-volume-slider" data-volume min="0" max="100" value="50">
+      </div>
+      <audio preload="metadata" data-audio-file>
+        <source src="audio2.mp3" type="audio/mpeg">
+        <source src="audio2.ogg" type="audio/ogg">
+      </audio>
+    </div>
+
+    <div class="sidebar-player" data-player="3">
+      <div class="player-info">
+        <div class="player-title">Night Drive</div>
+        <div class="player-artist">Synthwave Collection</div>
+      </div>
+      <div class="player-controls">
+        <button class="player-play-btn" data-play="play">
+          <i class="fas fa-play"></i>
+        </button>
+        <div class="player-progress" data-progress>
+          <div class="player-progress-bar"></div>
+        </div>
+        <span class="player-time" data-time>0:00</span>
+      </div>
+      <div class="player-volume">
+        <i class="fas fa-volume-down player-volume-icon" data-volume-icon></i>
+        <input type="range" class="player-volume-slider" data-volume min="0" max="100" value="50">
+      </div>
+      <audio preload="metadata" data-audio-file>
+        <source src="audio3.mp3" type="audio/mpeg">
+        <source src="audio3.ogg" type="audio/ogg">
+      </audio>
+    </div>
+  </div>
+</aside>
+
+<!-- ---------- HEADER ---------- -->
+<header>
+  <div class="logo">
+    <img src="5.jpg" alt="Kita Ikuyo">
+  </div>
+  <nav>
+    <a href="#about">Tentang Kita ikuyoooooooooooooo</a>
+    <a href="#portfolio">Kitaaaaaaaaaaaaaaaaaaaaaa</a>
+    <a href="#websites">Kitaaaaaaaaaaaaaaaaaaaaaaa</a>
+    <a href="#gallery">Galeri Media</a>
+    <a href="#video-gallery">Galeri Video</a>
+    <a href="#social">Sosial</a>
+    <a href="#contact">Kontak</a>
+  </nav>
+</header>
+
+<!-- ---------- HERO ---------- -->
+<section class="hero">
+  <div class="hero-content">
+    <img src="5.jpg" alt="Kita Ikuyo">
+    <div class="typing" id="typing"></div>
+    <div class="clock" id="clock"></div>
+    <div class="cta-group">
+      <a class="cta" href="#portfolio">Kitaaaaaaaaaaaaaaaaaaaaaa</a>
+      <a class="cta cta-outline" href="#contact">Tukeran Link</a>
+    </div>
+    <button class="love-button" onclick="handleLoveClick()">❤️ Klik untuk Love Berjatuhan</button>
+  </div>
+</section>
+
+<!-- ---------- ABOUT ---------- -->
+<section id="about">
+  <div class="container">
+    <div class="section-header">
+      <h2>Tentang Saya</h2>
+      <p>Halo! Saya Ikuyo Kitaaaaaaaaaaaaaaaaaaaaaaaa — pacarku anime walau ga ada yang nanya. kalo pacar kalian terserah peduli apa gue ga nanya ga peduli. Jangan lupa tukeran link ya! ne~pah!?</p>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- PORTFOLIO ---------- -->
+<section id="portfolio">
+  <div class="container">
+    <div class="section-header">
+      <h2>Kitaaaaaaaaaaaaaaaaaaaaaa</h2>
+      <p>Kitaaaaaaaaaaaaaaaaaaaaaaaa</p>
+    </div>
+    <div class="grid scroll" id="portfolio-grid">
+      <div class="card" data-portfolio>
+        <img src="pecone2.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Pemburik Gambar</h3>
+          <p class="card-desc">Kompres & edit gambar.</p>
+          <a class="btn" href="https://deltazexis.vercel.app/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-portfolio>
+        <img src="pecone2.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">kita ikuyo</h3>
+          <p class="card-desc">Ga peduli.</p>
+          <a class="btn" href="https://delt-a.vercel.app/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-portfolio>
+        <img src="pecone2.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Versi</h3>
+          <p class="card-desc">Tampilan</p>
+          <a class="btn" href="https://aelta-liart.vercel.app/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- WEBSITES ---------- -->
+<section id="websites">
+  <div class="container">
+    <div class="section-header">
+      <h2>Kita ikuyo</h2>
+      <p>bingung coccoknya pake warna apa</p>
+    </div>
+    <div class="grid scroll" id="websites-grid">
+      <!-- 12 card -->
+      <div class="card" data-website>
+        <img src="pecone1.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Goddess of Destruction</h3>
+          <p class="card-desc">My Bini.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/itsukashiorii-Goddes-of-destruction-Goddess-of-creation/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone3.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Akayashi Funayuurei</h3>
+          <p class="card-desc">Rooowrrr.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/akayashi_-funayuurei_./" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone4.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Reine</h3>
+          <p class="card-desc">IkutoKita.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/reine/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone6.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Itsuka</h3>
+          <p class="card-desc">Kita Ikuyo.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/Itsuka/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone7.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Itsukashiorii</h3>
+          <p class="card-desc">Kita Ikuyo.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/itsukashiorii/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone8.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Fushinana</h3>
+          <p class="card-desc">IkuyoKita.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/Fushinana-/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone1.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Necryuu</h3>
+          <p class="card-desc">Kita Ikuyo.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/Necryuu/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone2.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">1sl4_o02.v02</h3>
+          <p class="card-desc">Kita Ikuyo.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/1sl4_o02.v02/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone3.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">1sl4_o02.v2</h3>
+          <p class="card-desc">Rkooowr. sebelumnya.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/1sl4_o02.v2/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone4.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Tokisaki Kurumi</h3>
+          <p class="card-desc">kita ikuyo.</p>
+          <a class="btn" href="https://itsukashiorii.github.io/TokisakiKurumi/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone6.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Deltazexis</h3>
+          <p class="card-desc">Pemburik Gambar.</p>
+          <a class="btn" href="https://deltazexis.vercel.app/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+      <div class="card" data-website>
+        <img src="pecone7.jpg" alt="">
+        <div class="card-body">
+          <h3 class="card-title">Delt-a</h3>
+          <p class="card-desc">Versi Tradisional Jepang.</p>
+          <a class="btn" href="https://delt-a.vercel.app/" target="_blank">Kunjungi</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- ENHANCED IMAGE GALLERY WITH SLIDER ---------- -->
+<section id="gallery" class="image-gallery-section">
+  <div class="container">
+    <div class="gallery-header">
+      <h2 class="gallery-title">Galeri Gambar</h2>
+      <p class="gallery-subtitle">Koleksi gambar keren dengan tampilan modern</p>
+    </div>
+    
+    <div class="image-slider-container">
+      <button class="slider-nav prev" id="prevBtn">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      
+      <div class="image-slider" id="imageSlider">
+        <div class="slider-item">
+          <img src="1.jpg" alt="Gallery Image 1">
+          <div class="slider-overlay">
+            <i class="fas fa-image slider-overlay-icon"></i>
+            <div class="slider-overlay-text">Gambar 1</div>
+          </div>
+        </div>
+        <div class="slider-item">
+          <img src="2.jpg" alt="Gallery Image 2">
+          <div class="slider-overlay">
+            <i class="fas fa-image slider-overlay-icon"></i>
+            <div class="slider-overlay-text">Gambar 2</div>
+          </div>
+        </div>
+        <div class="slider-item">
+          <img src="3.jpg" alt="Gallery Image 3">
+          <div class="slider-overlay">
+            <i class="fas fa-image slider-overlay-icon"></i>
+            <div class="slider-overlay-text">Gambar 3</div>
+          </div>
+        </div>
+        <div class="slider-item">
+          <img src="4.jpg" alt="Gallery Image 4">
+          <div class="slider-overlay">
+            <i class="fas fa-image slider-overlay-icon"></i>
+            <div class="slider-overlay-text">Gambar 4</div>
+          </div>
+        </div>
+        <div class="slider-item">
+          <img src="5.jpg" alt="Gallery Image 5">
+          <div class="slider-overlay">
+            <i class="fas fa-image slider-overlay-icon"></i>
+            <div class="slider-overlay-text">Gambar 5</div>
+          </div>
+        </div>
+        <div class="slider-item">
+          <img src="6.jpg" alt="Gallery Image 6">
+          <div class="slider-overlay">
+            <i class="fas fa-image slider-overlay-icon"></i>
+            <div class="slider-overlay-text">Gambar 6</div>
+          </div>
+        </div>
+      </div>
+      
+      <button class="slider-nav next" id="nextBtn">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+    
+    <div class="slider-indicators" id="indicators"></div>
+  </div>
+</section>
+
+<!-- ---------- VIDEO GALLERY SECTION ---------- -->
+<section id="video-gallery" class="video-gallery-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Galeri Video</h2>
+      <p>Koleksi video keren dengan kontrol modern</p>
+    </div>
+    <div class="grid scroll" id="video-grid">
+      <!-- Video 1 -->
+      <div class="video-card" data-video>
+        <div class="video-thumbnail">
+          <img src="15.jpg" alt="Video Thumbnail">
+          <video class="video-player" preload="metadata" muted playsinline>
+            <source src="watamote.mp4" type="video/mp4">
+            Browser Anda tidak mendukung tag video.
+          </video>
+          <div class="video-play-overlay">
+            <svg class="play-icon" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Watamote Video 1</h3>
+          <p class="card-desc">Video anime Watamote episode 1</p>
+          <div class="video-controls">
+            <button class="video-play-btn" data-play="play">
+              <svg class="control-icon" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </button>
+            <div class="video-progress" data-progress>
+              <div class="video-progress-bar"></div>
+            </div>
+            <span class="video-time" data-time>0:00</span>
+            <button class="video-mute-btn" data-mute>
+              <svg class="control-icon" viewBox="0 0 24 24">
+                <path d="M3 9v6h4l5 5V4L7 9H3z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video 2 -->
+      <div class="video-card" data-video>
+        <div class="video-thumbnail">
+          <img src="11.jpg" alt="Video Thumbnail">
+          <video class="video-player" preload="metadata" muted playsinline>
+            <source src="watamote.mp4" type="video/mp4">
+            Browser Anda tidak mendukung tag video.
+          </video>
+          <div class="video-play-overlay">
+            <svg class="play-icon" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Watamote Video 2</h3>
+          <p class="card-desc">Video anime Watamote episode 2</p>
+          <div class="video-controls">
+            <button class="video-play-btn" data-play="play">
+              <svg class="control-icon" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </button>
+            <div class="video-progress" data-progress>
+              <div class="video-progress-bar"></div>
+            </div>
+            <span class="video-time" data-time>0:00</span>
+            <button class="video-mute-btn" data-mute>
+              <svg class="control-icon" viewBox="0 0 24 24">
+                <path d="M3 9v6h4l5 5V4L7 9H3z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video 3 -->
+      <div class="video-card" data-video>
+        <div class="video-thumbnail">
+          <img src="12.jpg" alt="Video Thumbnail">
+          <video class="video-player" preload="metadata" muted playsinline>
+            <source src="watamote.mp4" type="video/mp4">
+            Browser Anda tidak mendukung tag video.
+          </video>
+          <div class="video-play-overlay">
+            <svg class="play-icon" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Watamote Video 3</h3>
+          <p class="card-desc">Video anime Watamote episode 3</p>
+          <div class="video-controls">
+            <button class="video-play-btn" data-play="play">
+              <svg class="control-icon" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </button>
+            <div class="video-progress" data-progress>
+              <div class="video-progress-bar"></div>
+            </div>
+            <span class="video-time" data-time>0:00</span>
+            <button class="video-mute-btn" data-mute>
+              <svg class="control-icon" viewBox="0 0 24 24">
+                <path d="M3 9v6h4l5 5V4L7 9H3z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video 4 -->
+      <div class="video-card" data-video>
+        <div class="video-thumbnail">
+          <img src="13.jpg" alt="Video Thumbnail">
+          <video class="video-player" preload="metadata" muted playsinline>
+            <source src="watamote.mp4" type="video/mp4">
+            Browser Anda tidak mendukung tag video.
+          </video>
+          <div class="video-play-overlay">
+            <svg class="play-icon" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Watamote Video 4</h3>
+          <p class="card-desc">Video anime Watamote episode 4</p>
+          <div class="video-controls">
+            <button class="video-play-btn" data-play="play">
+              <svg class="control-icon" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </button>
+            <div class="video-progress" data-progress>
+              <div class="video-progress-bar"></div>
+            </div>
+            <span class="video-time" data-time>0:00</span>
+            <button class="video-mute-btn" data-mute>
+              <svg class="control-icon" viewBox="0 0 24 24">
+                <path d="M3 9v6h4l5 5V4L7 9H3z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video 5 -->
+      <div class="video-card" data-video>
+        <div class="video-thumbnail">
+          <img src="14.jpg" alt="Video Thumbnail">
+          <video class="video-player" preload="metadata" muted playsinline>
+            <source src="watamote.mp4" type="video/mp4">
+            Browser Anda tidak mendukung tag video.
+          </video>
+          <div class="video-play-overlay">
+            <svg class="play-icon" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Watamote Video 5</h3>
+          <p class="card-desc">Video anime Watamote episode 5</p>
+          <div class="video-controls">
+            <button class="video-play-btn" data-play="play">
+              <svg class="control-icon" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </button>
+            <div class="video-progress" data-progress>
+              <div class="video-progress-bar"></div>
+            </div>
+            <span class="video-time" data-time>0:00</span>
+            <button class="video-mute-btn" data-mute>
+              <svg class="control-icon" viewBox="0 0 24 24">
+                <path d="M3 9v6h4l5 5V4L7 9H3z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video 6 -->
+      <div class="video-card" data-video>
+        <div class="video-thumbnail">
+          <img src="15.jpg" alt="Video Thumbnail">
+          <video class="video-player" preload="metadata" muted playsinline>
+            <source src="watamote.mp4" type="video/mp4">
+            Browser Anda tidak mendukung tag video.
+          </video>
+          <div class="video-play-overlay">
+            <svg class="play-icon" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Watamote Video 6</h3>
+          <p class="card-desc">Video anime Watamote episode 6</p>
+          <div class="video-controls">
+            <button class="video-play-btn" data-play="play">
+              <svg class="control-icon" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </button>
+            <div class="video-progress" data-progress>
+              <div class="video-progress-bar"></div>
+            </div>
+            <span class="video-time" data-time>0:00</span>
+            <button class="video-mute-btn" data-mute>
+              <svg class="control-icon" viewBox="0 0 24 24">
+                <path d="M3 9v6h4l5 5V4L7 9H3z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- SOSIAL ---------- -->
+<section id="social">
+  <div class="container">
+    <div class="section-header">
+      <h2>Sosial Media</h2>
+      <p>Follow & tukeran link di sini yaa~</p>
+    </div>
+    <div class="social-links">
+      <a href="https://www.tiktok.com/@kuil.aberuniyu._" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+      <a href="https://www.instagram.com/kitaikuyo1700?igsh=MWJuazRxYjltaTRsNw==" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://www.facebook.com/profile.php?id=61579317030806" target="_blank" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+      <a href="https://pin.it/2rCPZpTjE" target="_blank" title="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
+      <a href="https://x.com/Kazukikazami03" target="_blank" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- KONTAK ---------- -->
+<section id="contact">
+  <div class="container">
+    <div class="section-header">
+      <h2>Kontak</h2>
+      <p>kita</p>
+    </div>
+    <a class="btn" style="margin-top:12px;display:inline-flex;align-items:center;gap:6px;background:#25d366;color:#000;padding:8px 18px;border-radius:24px;font-weight:600" href="https://wa.me/6285198180371" target="_blank">
+      <i class="fa-brands fa-whatsapp"></i> WhatsApp
+    </a>
+  </div>
+</section>
+
+<!-- ---------- FOOTER ---------- -->
+<footer>© <span id="year"></span> Kita Ikuyo • All rights reserved.</footer>
+
+<!-- ---------- BACK-TO-TOP ---------- -->
+<div id="backToTop"><i class="fa-solid fa-arrow-up"></i></div>
+
+<!-- ---------- SCROLL INDICATOR ---------- -->
+<div id="scrollIndicator"></div>
+
+<script>
+/* ---------- SIDEBAR & HAMBURGER ---------- */
+const hamburger = document.getElementById('hamburger');
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  sidebar.classList.toggle('active');
+  sidebarOverlay.classList.toggle('active');
+});
+
+sidebarOverlay.addEventListener('click', () => {
+  hamburger.classList.remove('active');
+  sidebar.classList.remove('active');
+  sidebarOverlay.classList.remove('active');
+});
+
+/* ---------- SIDEBAR AUDIO PLAYER ---------- */
+class SidebarPlayer {
+  constructor(player) {
+    this.player = player;
+    this.audio = player.querySelector('[data-audio-file]');
+    this.playBtn = player.querySelector('[data-play]');
+    this.progressBar = player.querySelector('.player-progress-bar');
+    this.progressContainer = player.querySelector('[data-progress]');
+    this.timeDisplay = player.querySelector('[data-time]');
+    this.volumeSlider = player.querySelector('[data-volume]');
+    this.volumeIcon = player.querySelector('[data-volume-icon]');
+    
+    this.isPlaying = false;
+    this.currentTime = 0;
+    this.duration = 0;
+    
+    this.init();
+  }
+  
+  init() {
+    this.audio.muted = true;
+    this.audio.volume = 0.5;
+    
+    this.playBtn.addEventListener('click', () => this.togglePlay());
+    this.progressContainer.addEventListener('click', (e) => this.seek(e));
+    this.volumeSlider.addEventListener('input', () => this.updateVolume());
+    this.volumeIcon.addEventListener('click', () => this.toggleMute());
+    
+    this.audio.addEventListener('loadedmetadata', () => {
+      this.duration = this.audio.duration;
+      this.updateTimeDisplay();
+    });
+    
+    this.audio.addEventListener('timeupdate', () => {
+      this.currentTime = this.audio.currentTime;
+      this.updateProgress();
+      this.updateTimeDisplay();
+    });
+    
+    this.audio.addEventListener('ended', () => {
+      this.isPlaying = false;
+      this.updatePlayButton();
+    });
+  }
+  
+  togglePlay() {
+    if (this.isPlaying) {
+      this.pause();
+    } else {
+      this.play();
+    }
+  }
+  
+  play() {
+    document.querySelectorAll('audio').forEach(audio => {
+      if (audio !== this.audio) {
+        audio.pause();
+      }
+    });
+    
+    this.audio.play();
+    this.isPlaying = true;
+    this.updatePlayButton();
+  }
+  
+  pause() {
+    this.audio.pause();
+    this.isPlaying = false;
+    this.updatePlayButton();
+  }
+  
+  seek(e) {
+    const rect = this.progressContainer.getBoundingClientRect();
+    const percent = (e.clientX - rect.left) / rect.width;
+    this.audio.currentTime = percent * this.duration;
+  }
+  
+  updateVolume() {
+    const volume = this.volumeSlider.value / 100;
+    this.audio.volume = volume;
+    
+    if (volume === 0) {
+      this.audio.muted = true;
+    } else {
+      this.audio.muted = false;
+    }
+    
+    this.updateVolumeIcon();
+  }
+  
+  toggleMute() {
+    this.audio.muted = !this.audio.muted;
+    
+    if (!this.audio.muted && this.audio.volume === 0) {
+      this.audio.volume = 0.5;
+      this.volumeSlider.value = 50;
+    }
+    
+    this.updateVolumeIcon();
+  }
+  
+  updateProgress() {
+    const percent = (this.currentTime / this.duration) * 100;
+    this.progressBar.style.width = percent + '%';
+  }
+  
+  updateTimeDisplay() {
+    const current = this.formatTime(this.currentTime);
+    const total = this.formatTime(this.duration);
+    this.timeDisplay.textContent = `${current} / ${total}`;
+  }
+  
+  updatePlayButton() {
+    const icon = this.playBtn.querySelector('i');
+    if (this.isPlaying) {
+      icon.classList.remove('fa-play');
+      icon.classList.add('fa-pause');
+    } else {
+      icon.classList.remove('fa-pause');
+      icon.classList.add('fa-play');
+    }
+  }
+  
+  updateVolumeIcon() {
+    const icon = this.volumeIcon;
+    icon.classList.remove('fa-volume-up', 'fa-volume-down', 'fa-volume-mute');
+    
+    if (this.audio.muted || this.audio.volume === 0) {
+      icon.classList.add('fa-volume-mute');
+    } else if (this.audio.volume < 0.5) {
+      icon.classList.add('fa-volume-down');
+    } else {
+      icon.classList.add('fa-volume-up');
+    }
+  }
+  
+  formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+}
+
+// Initialize sidebar players
+document.addEventListener('DOMContentLoaded', () => {
+  const sidebarPlayers = document.querySelectorAll('.sidebar-player');
+  sidebarPlayers.forEach(player => new SidebarPlayer(player));
+});
+
+/* ---------- ENHANCED IMAGE SLIDER ---------- */
+class ImageSlider {
+  constructor() {
+    this.slider = document.getElementById('imageSlider');
+    this.items = this.slider.querySelectorAll('.slider-item');
+    this.prevBtn = document.getElementById('prevBtn');
+    this.nextBtn = document.getElementById('nextBtn');
+    this.indicatorsContainer = document.getElementById('indicators');
+    
+    this.currentIndex = 0;
+    this.itemsPerView = this.getItemsPerView();
+    this.maxIndex = Math.max(0, this.items.length - this.itemsPerView);
+    
+    this.init();
+  }
+  
+  init() {
+    this.createIndicators();
+    this.updateSlider();
+    this.bindEvents();
+    
+    // Auto slide
+    this.startAutoSlide();
+  }
+  
+  getItemsPerView() {
+    if (window.innerWidth <= 480) return 1;
+    if (window.innerWidth <= 768) return 2;
+    return 3;
+  }
+  
+  createIndicators() {
+    this.indicatorsContainer.innerHTML = '';
+    for (let i = 0; i <= this.maxIndex; i++) {
+      const indicator = document.createElement('div');
+      indicator.className = 'slider-indicator';
+      if (i === this.currentIndex) indicator.classList.add('active');
+      indicator.addEventListener('click', () => this.goToSlide(i));
+      this.indicatorsContainer.appendChild(indicator);
+    }
+  }
+  
+  updateSlider() {
+    const translateX = -(this.currentIndex * (100 / this.itemsPerView));
+    this.slider.style.transform = `translateX(${translateX}%)`;
+    
+    // Update indicators
+    const indicators = this.indicatorsContainer.querySelectorAll('.slider-indicator');
+    indicators.forEach((indicator, index) => {
+      indicator.classList.toggle('active', index === this.currentIndex);
+    });
+    
+    // Update navigation buttons
+    this.prevBtn.style.opacity = this.currentIndex === 0 ? '0.5' : '1';
+    this.nextBtn.style.opacity = this.currentIndex >= this.maxIndex ? '0.5' : '1';
+  }
+  
+  nextSlide() {
+    if (this.currentIndex < this.maxIndex) {
+      this.currentIndex++;
+      this.updateSlider();
+    }
+  }
+  
+  prevSlide() {
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+      this.updateSlider();
+    }
+  }
+  
+  goToSlide(index) {
+    this.currentIndex = Math.min(Math.max(0, index), this.maxIndex);
+    this.updateSlider();
+  }
+  
+  startAutoSlide() {
+    this.autoSlideInterval = setInterval(() => {
+      if (this.currentIndex >= this.maxIndex) {
+        this.currentIndex = 0;
+      } else {
+        this.currentIndex++;
+      }
+      this.updateSlider();
+    }, 4000);
+  }
+  
+  stopAutoSlide() {
+    clearInterval(this.autoSlideInterval);
+  }
+  
+  bindEvents() {
+    this.prevBtn.addEventListener('click', () => this.prevSlide());
+    this.nextBtn.addEventListener('click', () => this.nextSlide());
+    
+    // Pause auto slide on hover
+    this.slider.addEventListener('mouseenter', () => this.stopAutoSlide());
+    this.slider.addEventListener('mouseleave', () => this.startAutoSlide());
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      this.itemsPerView = this.getItemsPerView();
+      this.maxIndex = Math.max(0, this.items.length - this.itemsPerView);
+      this.currentIndex = Math.min(this.currentIndex, this.maxIndex);
+      this.createIndicators();
+      this.updateSlider();
+    });
+    
+    // Touch/swipe support
+    let startX = 0;
+    let currentX = 0;
+    let isDragging = false;
+    
+    this.slider.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+      isDragging = true;
+      this.stopAutoSlide();
+    });
+    
+    this.slider.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      currentX = e.touches[0].clientX;
+    });
+    
+    this.slider.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      
+      const diff = startX - currentX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          this.nextSlide();
+        } else {
+          this.prevSlide();
+        }
+      }
+      this.startAutoSlide();
+    });
+  }
+}
+
+// Initialize image slider
+document.addEventListener('DOMContentLoaded', () => {
+  new ImageSlider();
+});
+
+/* ---------- LOVE HEARTS FUNCTION ---------- */
+let clickCount = 0;
+let clickTimer;
+let audioContext;
+
+function spawnHeart() {
+  const heart = document.createElement('div');
+  heart.classList.add('heart');
+  heart.style.left = Math.random() * window.innerWidth + 'px';
+  document.body.appendChild(heart);
+
+  playLoveAudio();
+
+  setTimeout(() => {
+    heart.remove();
+  }, 2500);
+}
+
+function playLoveAudio() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  fetch('rawr.mp3')
+    .then(response => {
+      if (!response.ok) throw new Error('File not found');
+      return response.arrayBuffer();
+    })
+    .then(data => audioContext.decodeAudioData(data))
+    .then(buffer => {
+      const source = audioContext.createBufferSource();
+      const gainNode = audioContext.createGain();
+
+      gainNode.gain.value = 10; // Volume 10x lebih keras
+      
+      source.buffer = buffer;
+      source.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      source.start(0);
+    })
+    .catch(error => {
+      console.log('Audio file rawr.mp3 not found, using fallback beep sound');
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.1);
+    });
+}
+
+function handleLoveClick() {
+  clickCount++;
+  
+  if (clickCount === 1) {
+    clickTimer = setTimeout(() => {
+      clickCount = 0;
+    }, 2000);
+  }
+  
+  if (clickCount >= 5) {
+    clearTimeout(clickTimer);
+    clickCount = 0;
+    
+    const heartRain = setInterval(() => {
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => spawnHeart(), i * 100);
+      }
+    }, 500);
+    
+    setTimeout(() => {
+      clearInterval(heartRain);
+    }, 10000);
+  } else {
+    spawnHeart();
+  }
+}
+
+/* ---------- PARTICLE FLOATING ---------- */
+const particleContainer=document.getElementById('particleContainer');
+const particleImages=['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg','6.jpg','7.jpg','8.jpg','9.jpg','10.jpg','11.jpg','12.jpg','13.jpg','14.jpg','15.jpg'];
+
+function createParticle(){
+  const img=document.createElement('img');
+  img.src=particleImages[Math.floor(Math.random()*particleImages.length)];
+  img.className='particle';
+  img.style.left=Math.random()*100+'%';
+  img.style.animationDuration=(20+Math.random()*15)+'s';
+  img.style.width=(50+Math.random()*50)+'px';
+  particleContainer.appendChild(img);
+  setTimeout(()=>img.remove(),35000);
+}
+setInterval(createParticle,2000);
+
+/* ---------- SCROLL FADE IN/OUT ---------- */
+const fadeObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.remove('hide');
+      entry.target.classList.add('show');
+    }else{
+      entry.target.classList.remove('show');
+      entry.target.classList.add('hide');
+    }
+  });
+},{threshold:.1});
+
+document.querySelectorAll('.card, .sidebar-player, .slider-item, .video-card').forEach(card=>{
+  card.classList.add('hide');
+  fadeObserver.observe(card);
+});
+
+/* ---------- TYPING EFFECT ---------- */
+const txts=["kita","ikuyo","ne~pah"];
+let i=0,c=0,s=!0;
+function type(){
+  const t=txts[i];
+  document.getElementById('typing').textContent=s?t.substring(0,c+1):t.substring(0,c-1);
+  s?c++:c--;
+  if(c===t.length+1&&s){s=!1;setTimeout(type,1500);return}
+  if(c===0&&!s){s=!0;i=(i+1)%txts.length}
+  setTimeout(type,s?120:60);
+}
+type();
+
+/* ---------- LIVE CLOCK ---------- */
+let startTime=parseInt(localStorage.getItem('startTime')||'0',10);
+if(!startTime){startTime=Date.now();localStorage.setItem('startTime',startTime)}
+function updateClock(){
+  const elapsed=Date.now()-startTime;
+  const totalSec=Math.floor(elapsed/1000);
+  const h=String(Math.floor(totalSec/3600)).padStart(2,'0');
+  const m=String(Math.floor((totalSec%3600)/60)).padStart(2,'0');
+  const s=String(totalSec%60).padStart(2,'0');
+  document.getElementById('clock').textContent=`${h}:${m}:${s}`;
+}
+updateClock();setInterval(updateClock,1000);
+
+/* ---------- BACK-TO-TOP ---------- */
+const btt=document.getElementById('backToTop');
+window.onscroll=()=>window.scrollY>300?btt.classList.add('show'):btt.classList.remove('show');
+btt.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+
+/* ---------- SCROLL INDICATOR ---------- */
+const scrollIndicator=document.getElementById('scrollIndicator');
+window.addEventListener('scroll',()=>{
+  const win=document.body.scrollTop||document.documentElement.scrollTop;
+  const height=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+  const scrolled=(win/height)*100;
+  scrollIndicator.style.width=scrolled+'%';
+});
+
+/* ---------- AUTO YEAR ---------- */
+document.getElementById('year').textContent=new Date().getFullYear();
+
+/* ---------- SMOOTH SCROLL ANCHOR ---------- */
+document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+  anchor.addEventListener('click',function(e){
+    e.preventDefault();
+    const target=document.querySelector(this.getAttribute('href'));
+    if(target){
+      target.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  });
+});
+
+/* ---------- LIGHTBOX FOR IMAGES ---------- */
+class ImageLightbox {
+  constructor() {
+    this.createLightbox();
+    this.bindEvents();
+  }
+  
+  createLightbox() {
+    this.lightbox = document.createElement('div');
+    this.lightbox.className = 'image-lightbox';
+    this.lightbox.innerHTML = `
+      <div class="lightbox-overlay"></div>
+      <div class="lightbox-content">
+        <img class="lightbox-image" src="" alt="">
+        <button class="lightbox-close">&times;</button>
+        <button class="lightbox-nav prev"><i class="fas fa-chevron-left"></i></button>
+        <button class="lightbox-nav next"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    `;
+    document.body.appendChild(this.lightbox);
+    
+    this.overlay = this.lightbox.querySelector('.lightbox-overlay');
+    this.image = this.lightbox.querySelector('.lightbox-image');
+    this.closeBtn = this.lightbox.querySelector('.lightbox-close');
+    this.prevBtn = this.lightbox.querySelector('.lightbox-nav.prev');
+    this.nextBtn = this.lightbox.querySelector('.lightbox-nav.next');
+  }
+  
+  bindEvents() {
+    // Open lightbox
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.slider-item img')) {
+        const img = e.target;
+        this.open(img.src, img.alt);
+      }
+    });
+    
+    // Close events
+    this.closeBtn.addEventListener('click', () => this.close());
+    this.overlay.addEventListener('click', () => this.close());
+    
+    // Navigation
+    this.prevBtn.addEventListener('click', () => this.navigate(-1));
+    this.nextBtn.addEventListener('click', () => this.navigate(1));
+    
+    // Keyboard events
+    document.addEventListener('keydown', (e) => {
+      if (this.lightbox.classList.contains('active')) {
+        if (e.key === 'Escape') this.close();
+        if (e.key === 'ArrowLeft') this.navigate(-1);
+        if (e.key === 'ArrowRight') this.navigate(1);
+      }
+    });
+  }
+  
+  open(src, alt) {
+    this.currentImages = Array.from(document.querySelectorAll('.slider-item img'));
+    this.currentIndex = this.currentImages.findIndex(img => img.src === src);
+    
+    this.image.src = src;
+    this.image.alt = alt;
+    this.lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  close() {
+    this.lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  
+  navigate(direction) {
+    this.currentIndex = (this.currentIndex + direction + this.currentImages.length) % this.currentImages.length;
+    const newImg = this.currentImages[this.currentIndex];
+    this.image.src = newImg.src;
+    this.image.alt = newImg.alt;
+    
+    // Add fade animation
+    this.image.style.opacity = '0';
+    setTimeout(() => {
+      this.image.style.opacity = '1';
+    }, 10);
+  }
+}
+
+// Initialize lightbox
+document.addEventListener('DOMContentLoaded', () => {
+  new ImageLightbox();
+});
+
+/* ---------- VIDEO GALLERY FUNCTIONALITY ---------- */
+class VideoCard {
+  constructor(card) {
+    this.card = card;
+    this.video = card.querySelector('.video-player');
+    this.playBtn = card.querySelector('[data-play]');
+    this.muteBtn = card.querySelector('[data-mute]');
+    this.progressBar = card.querySelector('.video-progress-bar');
+    this.progressContainer = card.querySelector('[data-progress]');
+    this.timeDisplay = card.querySelector('[data-time]');
+    this.thumbnail = card.querySelector('.video-thumbnail');
+    
+    this.isPlaying = false;
+    this.isMuted = true;
+    this.currentTime = 0;
+    this.duration = 0;
+    
+    this.init();
+  }
+  
+  init() {
+    // Setup video
+    this.video.muted = true;
+    this.video.autoplay = false;
+    this.video.loop = false;
+    this.video.playsinline = true; // Important for mobile
+    
+    // Set initial state
+    this.updatePlayButton();
+    this.updateMuteButton();
+    
+    // Bind events
+    this.playBtn.addEventListener('click', () => this.togglePlay());
+    this.muteBtn.addEventListener('click', () => this.toggleMute());
+    this.progressContainer.addEventListener('click', (e) => this.seek(e));
+    this.thumbnail.addEventListener('click', () => this.togglePlay());
+    
+    // Video events
+    this.video.addEventListener('loadedmetadata', () => {
+      this.duration = this.video.duration;
+      this.updateTimeDisplay();
+      console.log('Video loaded:', this.video.src, 'Duration:', this.duration);
+    });
+    
+    this.video.addEventListener('timeupdate', () => {
+      this.currentTime = this.video.currentTime;
+      this.updateProgress();
+      this.updateTimeDisplay();
+    });
+    
+    this.video.addEventListener('ended', () => {
+      this.isPlaying = false;
+      this.updatePlayButton();
+      this.card.classList.remove('playing');
+    });
+    
+    this.video.addEventListener('play', () => {
+      this.isPlaying = true;
+      this.updatePlayButton();
+      this.card.classList.add('playing');
+    });
+    
+    this.video.addEventListener('pause', () => {
+      this.isPlaying = false;
+      this.updatePlayButton();
+    });
+    
+    // Error handling
+    this.video.addEventListener('error', (e) => {
+      console.error('Video error:', e);
+      console.error('Video source:', this.video.currentSrc);
+      console.error('Error code:', this.video.error);
+    });
+    
+    // Check if video loads
+    this.video.addEventListener('loadstart', () => {
+      console.log('Video load started');
+    });
+    
+    this.video.addEventListener('canplay', () => {
+      console.log('Video can play');
+    });
+    
+    this.video.addEventListener('loadeddata', () => {
+      console.log('Video data loaded');
+    });
+  }
+  
+  togglePlay() {
+    if (this.isPlaying) {
+      this.pause();
+    } else {
+      this.play();
+    }
+  }
+  
+  play() {
+    // Pause other videos
+    document.querySelectorAll('.video-player').forEach(video => {
+      if (video !== this.video) {
+        video.pause();
+        video.closest('.video-card').classList.remove('playing');
+      }
+    });
+    
+    // Play current video
+    this.video.play().then(() => {
+      console.log('Video playing successfully');
+    }).catch(error => {
+      console.error('Error playing video:', error);
+      // Try to load video again
+      this.video.load();
+      setTimeout(() => {
+        this.video.play().catch(e => console.error('Still cannot play:', e));
+      }, 100);
+    });
+  }
+  
+  pause() {
+    this.video.pause();
+  }
+  
+  toggleMute() {
+    this.video.muted = !this.video.muted;
+    this.isMuted = this.video.muted;
+    this.updateMuteButton();
+  }
+  
+  seek(e) {
+    if (this.duration === 0) return;
+    const rect = this.progressContainer.getBoundingClientRect();
+    const percent = (e.clientX - rect.left) / rect.width;
+    this.video.currentTime = percent * this.duration;
+  }
+  
+  updateProgress() {
+    if (this.duration === 0) return;
+    const percent = (this.currentTime / this.duration) * 100;
+    this.progressBar.style.width = percent + '%';
+  }
+  
+  updateTimeDisplay() {
+    const current = this.formatTime(this.currentTime);
+    const total = this.formatTime(this.duration);
+    this.timeDisplay.textContent = `${current} / ${total}`;
+  }
+  
+  updatePlayButton() {
+    const icon = this.playBtn.querySelector('.control-icon');
+    if (this.isPlaying) {
+      // Change to pause icon
+      icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+    } else {
+      // Change to play icon
+      icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+    }
+  }
+  
+  updateMuteButton() {
+    const icon = this.muteBtn.querySelector('.control-icon');
+    if (this.isMuted) {
+      icon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
+    } else {
+      icon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3z"/>';
+    }
+  }
+  
+  formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+}
+
+// Initialize video cards
+document.addEventListener('DOMContentLoaded', () => {
+  const videoCards = document.querySelectorAll('.video-card');
+  videoCards.forEach(card => new VideoCard(card));
+  
+  // Debug: Check if videos exist
+  setTimeout(() => {
+    const videos = document.querySelectorAll('.video-player');
+    videos.forEach((video, index) => {
+      console.log(`Video ${index + 1} ready state:`, video.readyState);
+      console.log(`Video ${index + 1} duration:`, video.duration);
+      console.log(`Video ${index + 1} src:`, video.currentSrc);
+    });
+  }, 1000);
+});
+
+/* ---------- FINAL TOUCHES ---------- */
+console.log('🎉 Kita Ikuyo website loaded successfully!');
+console.log('💡 Features:');
+console.log('  - Fixed video gallery with proper video playback');
+console.log('  - Individual video controls with SVG icons');
+console.log('  - Horizontal scrolling video gallery');
+console.log('  - Responsive design');
+console.log('  - Smooth animations and transitions');
+</script>
+
+</body>
+</html>
